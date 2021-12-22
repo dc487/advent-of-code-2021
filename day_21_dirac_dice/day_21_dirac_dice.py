@@ -1,17 +1,10 @@
 import pathlib
+from functools import cache
 
 def load_input():
     return pathlib.Path("./input.txt").read_text().strip("\n").splitlines()
 
-def memoize(f):
-    def memoized(*x):
-        if x not in memoized.cache:
-            memoized.cache[x] = f(*x)
-        return memoized.cache[x]
-
-    memoized.cache = {}
-    return memoized
-
+@cache
 def play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, next_dice_roll):
     next_player = 1
 
@@ -39,37 +32,36 @@ def play_quantum_game(player_1_position, player_2_position, player_1_score, play
 
     return roll_quantum_dirac_dice(player_1_position, player_2_position, player_1_score, player_2_score, next_player)
 
-memoized_play_quantum_game = memoize(play_quantum_game)
 
 def roll_quantum_dirac_dice(player_1_position, player_2_position, player_1_score, player_2_score, current_player):
     player_1_wins = 0
     player_2_wins = 0
 
-    (next_player_1_wins, next_player_2_wins) = memoized_play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 3)
+    (next_player_1_wins, next_player_2_wins) = play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 3)
     player_1_wins += 1 * next_player_1_wins
     player_2_wins += 1 * next_player_2_wins
 
-    (next_player_1_wins, next_player_2_wins) = memoized_play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 4)
+    (next_player_1_wins, next_player_2_wins) = play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 4)
     player_1_wins += 3 * next_player_1_wins
     player_2_wins += 3 * next_player_2_wins
 
-    (next_player_1_wins, next_player_2_wins) = memoized_play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 5)
+    (next_player_1_wins, next_player_2_wins) = play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 5)
     player_1_wins += 6 * next_player_1_wins
     player_2_wins += 6 * next_player_2_wins
 
-    (next_player_1_wins, next_player_2_wins) = memoized_play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 6)
+    (next_player_1_wins, next_player_2_wins) = play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 6)
     player_1_wins += 7 * next_player_1_wins
     player_2_wins += 7 * next_player_2_wins
 
-    (next_player_1_wins, next_player_2_wins) = memoized_play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 7)
+    (next_player_1_wins, next_player_2_wins) = play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 7)
     player_1_wins += 6 * next_player_1_wins
     player_2_wins += 6 * next_player_2_wins
 
-    (next_player_1_wins, next_player_2_wins) = memoized_play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 8)
+    (next_player_1_wins, next_player_2_wins) = play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 8)
     player_1_wins += 3 * next_player_1_wins
     player_2_wins += 3 * next_player_2_wins
 
-    (next_player_1_wins, next_player_2_wins) = memoized_play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 9)
+    (next_player_1_wins, next_player_2_wins) = play_quantum_game(player_1_position, player_2_position, player_1_score, player_2_score, current_player, 9)
     player_1_wins += 1 * next_player_1_wins
     player_2_wins += 1 * next_player_2_wins
 

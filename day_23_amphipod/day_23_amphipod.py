@@ -1,5 +1,5 @@
 import pathlib
-from queue import PriorityQueue
+import heapq
 
 def load_input():
     return pathlib.Path("./input.txt").read_text().strip("\n").splitlines()
@@ -109,11 +109,11 @@ def run_pathfinding(initial_state, pod_size):
 
     visited_states = set()
 
-    state_queue = PriorityQueue()
-    state_queue.put((0, 0, initial_state, []))
+    state_queue = []
+    heapq.heappush(state_queue, (0, 0, initial_state, []))
 
-    while not state_queue.empty():
-        (weighting, energy, current_state, current_path) = state_queue.get()
+    while len(state_queue) > 0:
+        (weighting, energy, current_state, current_path) = heapq.heappop(state_queue)
 
         if current_state in visited_states:
             continue
@@ -187,7 +187,7 @@ def run_pathfinding(initial_state, pod_size):
                         next_energy = energy + move_energies[letter_index] * (abs(current_room_position - room_positions[letter_index]) + min_room_position - 1)
                         next_weighting = next_energy
                         next_path = current_path[:] + [current_state]
-                        state_queue.put((next_weighting, next_energy, current_state[:current_index] + (desired_location + str(min_room_position - 1),) + current_state[current_index + 1:], next_path))
+                        heapq.heappush(state_queue, (next_weighting, next_energy, current_state[:current_index] + (desired_location + str(min_room_position - 1),) + current_state[current_index + 1:], next_path))
 
                 elif current_room != 'h': 
                     # we're in the wrong room (or wrong position in right room)
@@ -222,7 +222,7 @@ def run_pathfinding(initial_state, pod_size):
                             next_energy = energy + move_energies[letter_index] * (abs(room_position - k) + int(current_room_position))
                             next_weighting = next_energy
                             next_path = current_path[:] + [current_state]
-                            state_queue.put((next_weighting, next_energy, current_state[:current_index] + ('h' + str(k),) + current_state[current_index + 1:], next_path))
+                            heapq.heappush(state_queue, (next_weighting, next_energy, current_state[:current_index] + ('h' + str(k),) + current_state[current_index + 1:], next_path))
 
 
 if __name__ == "__main__":
